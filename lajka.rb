@@ -18,28 +18,27 @@ command :copy do |c|
     exit unless args[0] and args[1]
     source = "#{args[0]}/**/*"
 
-    Dir.glob(source).each do |f|
-      next unless File.file? f
+    Dir.glob(source).each do |file|
+      next unless File.file? file
 
-      filename = File.basename f
-      extension = File.extname(f).downcase
-      modified_at = File.mtime f
+      name = File.basename file
+      ext = File.extname(file).downcase
+      date = File.mtime file
       type = "MISC"
+      type = "JPEG" if jpeg_extensions.include? ext
+      type = "RAW" if raw_extensions.include? ext
+      type = "VIDEO" if video_extensions.include? ext
 
-      if jpeg_extensions.include? extension
-        type = "JPEG"
-      elsif raw_extensions.include? extension
-        type = "RAW"
-      elsif video_extensions.include? extension
-        type = "VIDEO"
-      end
-
-      destination = "#{args[1]}/#{type}/#{modified_at.year}/#{modified_at.strftime('%F')}"
+      destination = "#{args[1]}/#{type}/#{date.year}/#{date.strftime('%F')}"
 
       FileUtils.mkdir_p destination unless File.directory? destination
-      FileUtils.cp f, destination, preserve: true unless File.file? "#{destination}/#{filename}"
 
-      puts "Copied photograph #{filename} of type #{type} dated at #{modified_at.strftime('%F')}"
+      unless File.file? "#{destination}/#{name}"
+        FileUtils.cp file, destination, preserve: true
+        puts "Copied #{name} [#{date.strftime('%F')}] [#{type}]"
+      else
+        puts "Ignored #{name} (exists) [#{date.strftime('%F')}] [#{type}]"
+      end
     end
   end
 end
