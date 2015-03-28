@@ -11,7 +11,7 @@ never_trace!
 
 jpeg_extensions = %[.jpg .jpeg .jpe .jif .jfif .jfi]
 raw_extensions = %[.3fr .ari .arw .bay .crw .cr2 .cap .dcs .dcr .dng .drf .eip .erf .fff .iiq .k25 .kdc .mdc .mef .mos .mrw .nef .nrw .obm .orf .pef .ptx .pxn .r3d .raf .raw .rwl .rw2 .rwz .sr2 .srf .srw .x3f]
-video_extensions = %[.mov]
+video_extensions = %[.avi .mpeg .mpg .mp4 .mov .3gp .mkv]
 
 command :copy do |c|
   c.syntax = "lajka run <source> <destination>"
