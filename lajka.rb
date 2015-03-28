@@ -41,7 +41,7 @@ command :copy do |c|
       FileUtils.mkdir_p destination unless File.directory? destination
       FileUtils.cp f, destination, preserve: true unless File.file? "#{destination}/#{filename}"
 
-      puts "Copied photograph #{filename} of type #{type} modified at #{modified_at.strftime('%F')}"
+      puts "Copied photograph #{filename} of type #{type} dated at #{modified_at.strftime('%F')}"
     end
   end
 end
