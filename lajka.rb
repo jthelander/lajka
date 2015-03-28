@@ -15,11 +15,11 @@ command :copy do |c|
   c.syntax = "lajka run <source> <destination>"
   c.description = "Copies photographs from somewhere to elsewhere"
   c.action do |args, options|
-    exit unless args[0] and args[1]
-    source = "#{args[0]}/**/*"
+    source_arg = "#{args.shift}/**/*" || abort("source argument required.")
+    destination_arg = args.shift || abort("destination argument required.")
 
-    Dir.glob(source).each do |file|
-      next unless File.file? file
+    Dir.glob(source_arg).each do |file|
+      exit unless File.file? file
 
       name = File.basename file
       ext = File.extname(file).downcase
@@ -29,7 +29,7 @@ command :copy do |c|
       type = "RAW" if raw_extensions.include? ext
       type = "VIDEO" if video_extensions.include? ext
 
-      destination = "#{args[1]}/#{type}/#{date.year}/#{date.strftime('%F')}"
+      destination = "#{destination_arg}/#{type}/#{date.year}/#{date.strftime('%F')}"
 
       FileUtils.mkdir_p destination unless File.directory? destination
 
