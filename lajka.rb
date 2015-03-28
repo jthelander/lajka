@@ -17,8 +17,8 @@ command :copy do |c|
   c.syntax = "lajka run <source> <destination>"
   c.description = "Copies photographs from somewhere to elsewhere"
   c.action do |args, options|
-    source = "src/**/*"
-    dest = "dest"
+    exit unless args[0] and args[1]
+    source = "#{args[0]}/**/*"
 
     Dir.glob(source).each do |f|
       next unless File.file? f
@@ -36,10 +36,10 @@ command :copy do |c|
         type = "VIDEO"
       end
 
-      dest_full = "#{dest}/#{type}/#{modified_at.year}/#{modified_at.strftime('%F')}"
+      destination = "#{args[1]}/#{type}/#{modified_at.year}/#{modified_at.strftime('%F')}"
 
-      FileUtils.mkdir_p dest_full unless File.directory? dest_full
-      FileUtils.cp f, dest_full unless File.file? "#{dest_full}/#{filename}"
+      FileUtils.mkdir_p destination unless File.directory? destination
+      FileUtils.cp f, destination, preserve: true unless File.file? "#{destination}/#{filename}"
 
       puts "Copied photograph #{filename} of type #{type} modified at #{modified_at.strftime('%F')}"
     end
