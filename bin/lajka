@@ -1,0 +1,29 @@
+#!/usr/bin/env ruby
+
+require "lajka"
+require "commander/import"
+
+program :version, Lajka::VERSION
+program :description, "Command-line tool for copying photographs from somewhere to elsewhere."
+default_command :copy
+
+command :copy do |c|
+  c.syntax = "lajka run <source> <destination>"
+  c.description = "Copies photographs from somewhere to elsewhere"
+  c.action do |args, options|
+    source = "#{args.shift}/**/*" || abort("source argument required.")
+    destination = args.shift || abort("destination argument required.")
+
+    Dir.glob(source).each do |file|
+      next unless File.file? file
+
+      metadata = Lajka::metadata file
+
+      if Lajka::copy file, destination
+        puts "Copied #{metadata['file']} [#{metadata['mtime'].strftime('%F')}] [#{metadata['type']}]"
+      else
+        puts "Ignored #{metadata['file']} (exists) [#{metadata['mtime'].strftime('%F')}] [#{metadata['type']}]"
+      end
+    end
+  end
+end
