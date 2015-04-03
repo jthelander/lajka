@@ -4,22 +4,23 @@ require "lajka"
 require "commander/import"
 
 program :version, Lajka::VERSION
-program :description, "Command-line tool for copying photographs from somewhere to elsewhere."
+program :description, "Tool for copying photographs from somewhere to elsewhere"
 default_command :copy
 
 command :copy do |c|
-  c.syntax = "lajka run <source> <destination>"
-  c.description = "Copies photographs from somewhere to elsewhere"
+  c.syntax = "lajka copy <source> <destination>"
+  c.description = "Copy photographs from <source> to <destination>"
   c.action do |args, options|
-    source = "#{args.shift}/**/*" || abort("source argument required.")
-    destination = args.shift || abort("destination argument required.")
+    source = "#{args.shift}/**/*" || abort("source required.")
+    destination = args.shift || abort("destination required.")
 
-    Dir.glob(source).each do |file|
-      next unless File.file? file
+    copier = Lajka::Copier.new
 
-      metadata = Lajka::metadata file
+    Dir.glob(source).each do |f|
+      next unless File.file? f
+      metadata = Lajka::Metadata::get f
 
-      if Lajka::copy file, destination
+      if copier.copy f, destination
         puts "Copied #{metadata['file']} [#{metadata['mtime'].strftime('%F')}] [#{metadata['type']}]"
       else
         puts "Ignored #{metadata['file']} (exists) [#{metadata['mtime'].strftime('%F')}] [#{metadata['type']}]"
