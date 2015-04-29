@@ -1,7 +1,8 @@
 require "rubygems"
+require "mini_exiftool"
 
 module Lajka
-  VERSION = "0.0.4"
+  VERSION = "0.0.5"
 
   module Format
     JPEG  = %[.jpg .jpeg .jpe .jif .jfif .jfi]
@@ -17,9 +18,12 @@ module Lajka
       type = "RAW" if Lajka::Format::RAW.include? ext
       type = "VIDEO" if Lajka::Format::VIDEO.include? ext
 
+      exif = MiniExiftool.new source
+
       {
         "file" => File.basename(source),
         "ext" => ext,
+        "exif" => exif,
         "mtime" => File.mtime(source),
         "ctime" => File.ctime(source),
         "source" => source,
@@ -39,7 +43,7 @@ module Lajka
 
     private
     def self.get_destination metadata, destination
-      "#{destination}/#{metadata['type']}/#{metadata['mtime'].year}/#{metadata['mtime'].strftime('%F')}"
+      "#{destination}/#{metadata['type']}/#{metadata['exif'].date_time_original.year}/#{metadata['exif'].date_time_original.strftime('%F')}"
     end
 
     def self.mkdir dir

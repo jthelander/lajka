@@ -21,9 +21,9 @@ command :copy do |c|
       metadata = Lajka::Metadata::get f
 
       if copier.copy f, destination
-        puts "Copied #{metadata['file']} [#{metadata['mtime'].strftime('%F')}] [#{metadata['type']}]"
+        puts "Copied #{metadata['file']} [#{metadata['exif'].date_time_original.strftime('%F')}] [#{metadata['type']}]"
       else
-        puts "Ignored #{metadata['file']} (exists) [#{metadata['mtime'].strftime('%F')}] [#{metadata['type']}]"
+        puts "Ignored #{metadata['file']} (exists) [#{metadata['exif'].date_time_original.strftime('%F')}] [#{metadata['type']}]"
       end
     end
   end

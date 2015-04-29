@@ -13,4 +13,5 @@ Gem::Specification.new do |s|
   s.license      = "MIT"
   s.require_path = "lib"
   s.add_dependency "commander", "~> 4.3"
+  s.add_dependency "mini_exiftool", "~> 2.0"
 end
