@@ -5,7 +5,7 @@ Lajka is a simple command-line tool for copying photographs from somewhere to el
 * It sorts these photographs and videos first by type (jpeg, raw, video, misc) and then by date
 * It does not overwrite existing photographs
 
-The destination directory structure looks like this: 
+The destination directory structure looks like this:
 
 ```
 +-- JPEG
@@ -36,3 +36,7 @@ The destination directory structure looks like this:
 |           +-- R0000627.MOV
 |           +-- R0000628.MOV
 ```
+
+## Requirements
+
+Lajka requires exiftool (http://www.sno.phy.queensu.ca/~phil/exiftool/).
